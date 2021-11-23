@@ -51,12 +51,12 @@ namespace GalleryProject.Repository
             return unitOfWork.AlbumRepository.GetById(id);
         }
 
-        public async Task<Album> UpdateAlbumAsync(Album entity)
+        public async Task<Album> UpdateAlbumAsync(int id,Album entity)
         {
-            Album tempEntity = await GetAlbumByIdAsync(entity.id);
-            tempEntity.albumName = entity.albumName;
-            tempEntity.description = entity.description;
-            tempEntity.dateCreated = entity.dateCreated;
+            Album tempEntity = await GetAlbumByIdAsync(id);
+            if (entity.albumName != null) tempEntity.albumName = entity.albumName;
+            if (entity.description != null) tempEntity.description = entity.description;
+            if (entity.dateCreated != null) tempEntity.dateCreated = entity.dateCreated;
           
             await unitOfWork.AlbumRepository.Update(tempEntity);
             return tempEntity;

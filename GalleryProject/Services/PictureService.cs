@@ -26,9 +26,9 @@ namespace GalleryProject.Services
         {
             return unitOfWork.PictureRepository.GetPictureByIdAsync(id);
         }
-        public Task<Picture> Update(Picture entity)
+        public Task<Picture> Update(int id,Picture entity)
         {
-            return unitOfWork.PictureRepository.UpdatePictureAsync(entity);
+            return unitOfWork.PictureRepository.UpdatePictureAsync(id,entity);
         }
         public Task<Picture> Add(Picture entity)
         {

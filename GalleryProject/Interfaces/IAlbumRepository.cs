@@ -11,7 +11,7 @@ namespace GalleryProject.Interfaces
         Task<Album> GetAlbumByIdAsync(int id);
         Task<List<Album>> GetAlbumAsync();
         Task<Album> AddAlbumAsync(Album entity);
-        Task<Album> UpdateAlbumAsync(Album entity);
+        Task<Album> UpdateAlbumAsync(int id,Album entity);
 
         Task<Album> DeleteAlbumAsync(int id);
     }

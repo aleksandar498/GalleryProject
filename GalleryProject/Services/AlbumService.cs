@@ -26,9 +26,9 @@ namespace GalleryProject.Services
         {
             return unitOfWork.AlbumRepository.GetAlbumByIdAsync(id);
         }
-        public Task<Album> Update(Album entity)
+        public Task<Album> Update(int id,Album entity)
         {
-            return unitOfWork.AlbumRepository.UpdateAlbumAsync(entity);
+            return unitOfWork.AlbumRepository.UpdateAlbumAsync(id,entity);
         }
         public Task<Album> Add(Album entity)
         {

@@ -50,15 +50,14 @@ namespace GalleryProject.Repository
             return  unitOfWork.UserRepository.GetById(id);
         }
 
-        public async Task<User> UpdateUserAsync(User entity)
+        public async Task<User> UpdateUserAsync(int id,User entity)
         {
-            User tempEntity = await GetUserByIdAsync(entity.id);
-
-            tempEntity.username = entity.username;
-            tempEntity.password = entity.password;
-            tempEntity.name = entity.name;
-            tempEntity.email = entity.email;
-            tempEntity.dateOfBirth = entity.dateOfBirth;
+            User tempEntity = await GetUserByIdAsync(id);
+            if(entity.username!=null) tempEntity.username = entity.username;
+            if (entity.password != null) tempEntity.password = entity.password;
+            if (entity.name != null) tempEntity.name = entity.name;
+            if (entity.email != null) tempEntity.email = entity.email;
+            if (entity.dateOfBirth != null) tempEntity.dateOfBirth = entity.dateOfBirth;
             await unitOfWork.UserRepository.Update(tempEntity);
             return tempEntity;
 

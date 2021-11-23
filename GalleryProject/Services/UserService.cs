@@ -26,9 +26,9 @@ namespace GalleryProject.Services
         {
             return unitOfWork.UserRepository.GetUserByIdAsync(id);
         }
-        public Task<User> Update(User entity)
+        public Task<User> Update(int id,User entity)
         {
-            return unitOfWork.UserRepository.UpdateUserAsync(entity);
+            return unitOfWork.UserRepository.UpdateUserAsync(id,entity);
         }
         public Task<User> Add(User entity)
         {

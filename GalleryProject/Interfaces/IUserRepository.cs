@@ -11,7 +11,7 @@ namespace GalleryProject.Interfaces
         Task<User> GetUserByIdAsync(int id);
         Task<List<User>> GetUserAsync();
         Task<User> AddUserAsync(User entity);
-        Task<User> UpdateUserAsync(User entity);
+        Task<User> UpdateUserAsync(int id,User entity);
 
         Task<User> DeleteUserAsync(int id);
     }

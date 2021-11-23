@@ -50,12 +50,12 @@ namespace GalleryProject.Repository
             return unitOfWork.PictureRepository.GetById(id);
         }
 
-        public async Task<Picture> UpdatePictureAsync(Picture entity)
+        public async Task<Picture> UpdatePictureAsync(int id,Picture entity)
         {
-            Picture tempEntity = await GetPictureByIdAsync(entity.id);
-            tempEntity.description = entity.description;
-            tempEntity.imageUri = entity.imageUri;
-            tempEntity.dateAdded = entity.dateAdded;          
+            Picture tempEntity = await GetPictureByIdAsync(id);
+            if(entity.description!=null) tempEntity.description = entity.description;
+            if (entity.imageUri != null) tempEntity.imageUri = entity.imageUri;
+            if (entity.dateAdded != null) tempEntity.dateAdded = entity.dateAdded;          
             await unitOfWork.PictureRepository.Update(tempEntity);
             return tempEntity;
         }

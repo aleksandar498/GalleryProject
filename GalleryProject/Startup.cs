@@ -1,22 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using GalleryProject.Data;
+using GalleryProject.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GalleryProject
 {
     public class Startup
     {
+        private const string SECRETKEY = "mykeyjwtmykeyjwtmykeyjwtmykeyjwtmykeyjwtmykeyjwtmykeyjwtmykeyjwt";
+        public static readonly SymmetricSecurityKey SIGNINGKEY = new
+            SymmetricSecurityKey(Encoding.UTF8.GetBytes(SECRETKEY));
         private readonly IConfiguration _config;
         public Startup(IConfiguration configuration)
         {
@@ -29,6 +32,24 @@ namespace GalleryProject
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<AlbumRepository>();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<PictureRepository>();
+            services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = "JwtBearer";
+                options.DefaultChallengeScheme = "JwtBearer";
+            }).AddJwtBearer("JwtBearer",jwtOptions=>
+            {
+                jwtOptions.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    IssuerSigningKey = SIGNINGKEY,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = "https://localhost:44301",
+                    ValidAudience = "https://localhost:44301",
+                    ValidateLifetime = true
+                };
+            }) ;
             services.AddDbContext<GalleryContext>(
         options => options.UseSqlServer(_config.GetConnectionString("DefaultConnection")));
         }
@@ -44,6 +65,7 @@ namespace GalleryProject
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

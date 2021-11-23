@@ -11,7 +11,7 @@ namespace GalleryProject.Interfaces
         Task<Picture> GetPictureByIdAsync(int id);
         Task<List<Picture>> GetPictureAsync();
         Task<Picture> AddPictureAsync(Picture entity);
-        Task<Picture> UpdatePictureAsync(Picture entity);
+        Task<Picture> UpdatePictureAsync(int id,Picture entity);
 
         Task<Picture> DeletePictureAsync(int id);
     }
