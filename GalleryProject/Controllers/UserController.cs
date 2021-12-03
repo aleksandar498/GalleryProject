@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 using GalleryProject.Data;
 using GalleryProject.Models;
@@ -35,11 +37,14 @@ namespace GalleryProject.Controllers
             {
                 if(user.username==temp[i].username && user.password == temp[i].password)
                 {
-                    return new ObjectResult(JwtToken.GenerateJwtToken());
+                    LoginReturn lr = new LoginReturn();
+                    lr.token = JwtToken.GenerateJwtToken();
+                    lr.userId = temp[i].id;
+                    return Ok(lr);
                 }
             }
-           
-            return (user);
+
+            return BadRequest();
         }
         // GET: api/User
         [HttpGet]
@@ -57,7 +62,7 @@ namespace GalleryProject.Controllers
             var temp = await _service.GetById(id);
             if (temp == null) return new NotFoundObjectResult(null);
 
-            return (temp);
+            return Ok(temp);
         }
 
         // PUT: api/User/5
@@ -69,12 +74,12 @@ namespace GalleryProject.Controllers
         }
 
         // POST: api/User
-        [AllowAnonymous]
+       [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-           await _service.Add(user);             
-           return (user);
+           await _service.Add(user);
+            return Ok(user);
         }
         
         // DELETE: api/User/5
@@ -86,20 +91,46 @@ namespace GalleryProject.Controllers
         }
         // POST: api/User/reset
         [HttpPost("reset")]
-        public async Task<ActionResult<User>> ResetPassword( string email,string username)
+        public async Task<ActionResult<User>> ResetPassword(User user)
         {
             var temp = await _service.GetAll();
-            int index=0;
+        
             for (int i = 0; i < temp.Count; i++)
             {
-                if (username == temp[i].username && email == temp[i].email)
+                if (user.username == temp[i].username && user.email == temp[i].email)
                 {
                     temp[i].password = "defaultPassword";
-                    index = i;
+                   
+                    await _service.Update(temp[i].id, temp[i]);
+
+                    MailMessage message = new MailMessage("aleksandar498@gmail.com", "pasajlics97@gmail.com");
+
+                    string mailbody = "Your password is set to 'defaultPassword'";
+                    message.Subject = "Reset password";
+                    message.Body = mailbody;
+                    message.BodyEncoding = Encoding.UTF8;
+                    message.IsBodyHtml = true;
+                    SmtpClient client = new SmtpClient("smtp.gmail.com", 587); //Gmail smtp    
+                    System.Net.NetworkCredential basicCredential1 = new
+                        //unjeti ispravne podatke
+                    System.Net.NetworkCredential("email", "lozinka");
+                    client.EnableSsl = true;
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = basicCredential1;
+                    try
+                    {
+                        client.Send(message);
+                        return Ok();
+                    }
+
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
                 }
             }
 
-            return (temp[index]);
+            return BadRequest();
         }
 
 

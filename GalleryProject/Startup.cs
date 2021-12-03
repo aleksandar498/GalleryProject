@@ -32,6 +32,7 @@ namespace GalleryProject
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors();
             services.AddScoped<AlbumRepository>();
             services.AddScoped<UserRepository>();
             services.AddScoped<PictureRepository>();
@@ -63,6 +64,11 @@ namespace GalleryProject
             }
 
             app.UseHttpsRedirection();
+            app.UseCors(x => x
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .SetIsOriginAllowed(origin => true) // allow any origin
+              .AllowCredentials()); // allow credentials
 
             app.UseRouting();
             app.UseAuthentication();

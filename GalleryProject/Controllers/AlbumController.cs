@@ -40,7 +40,7 @@ namespace GalleryProject.Controllers
             var temp = await _service.GetById(id);
             if (temp == null) return new NotFoundObjectResult(null);
 
-            return (temp);
+            return Ok(temp);
         }
 
         // PUT: api/Album/5
@@ -56,7 +56,7 @@ namespace GalleryProject.Controllers
         public async Task<ActionResult<Album>> PostAlbum(Album user)
         {
             await _service.Add(user);
-            return (user);
+            return Ok(user);
         }
 
         // DELETE: api/Album/5

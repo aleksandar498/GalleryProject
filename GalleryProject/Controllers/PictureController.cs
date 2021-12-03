@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GalleryProject.Data;
@@ -40,7 +41,7 @@ namespace GalleryProject.Controllers
             var temp = await _service.GetById(id);
             if (temp == null) return new NotFoundObjectResult(null);
 
-            return (temp);
+            return Ok(temp);
         }
 
         // PUT: api/Picture/5
@@ -55,8 +56,9 @@ namespace GalleryProject.Controllers
         [HttpPost]
         public async Task<ActionResult<Picture>> PostPicture(Picture user)
         {
+           
             await _service.Add(user);
-            return (user);
+            return Ok(user);
         }
 
         // DELETE: api/Picture/5
